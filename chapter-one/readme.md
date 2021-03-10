@@ -84,3 +84,59 @@ four properties can be transformed
 - Note that object transformations are performed with local axes, rather than the _world_ axis
 - good reading on gimbal locking: https://en.wikipedia.org/wiki/Gimbal_lock
 - quaternions are exactly what you learned in linear algebra too: https://en.wikipedia.org/wiki/Quaternion
+
+## 06 - animations
+
+- when animating, no matter the framerate, the result should be the same
+
+## 07 - cameras
+
+- there are lots of cameras, but we're only gonna use two (perspective/orthogonal)
+
+### ortographic camera
+
+- Lacks perspective—objects will look the same no matter the distance
+- needs the horizontal amplitude multiplied by the aspect ratio to not squish elements
+
+### Custom controlss
+
+I think this is even a bit more important than the camera stuff—It's one of the most difficult parts of making a game, and the built-in controls have nice stuff like easing/damping, which is quite neat.
+
+You can create your own just by moving your camera / elements, listening for changes and updating everything, all on the `tick()` function, but that's a bit cumbersome if any of the built-in controls fit. Here are a few cool ones:
+
+- FlyControls: literally spaceship controls, nice. I don't know if you can modify the easing, but you can def modify the movement / rotation speed
+
+- PointerLockControls: literally FPS controls—you handle everything, but it locks the pointer and broadcasts the movement through `mousemove` callbacks.
+
+- OrbitControls: The one used in the tutorial. Nice to, for example, get an object or a texture and be able to rotate / zoom around it. Has damping. For some reason, needs to be imported separately, prob to reduce bloat.
+
+## 08 - fullscreen / resizing
+
+### Handle resizing
+
+Whenever we resize the canvas, we of course wanna update the variables holding the size itself. We also need to do some housekeeping on the camera so we're sure everything is working correctly.
+
+### Now, let's talk pixel ratio
+
+Basically, jagged borders and that ugliness. This means your pixel ratio is > 1. Apple came up with a 2 pixel ratio, which we can imagine like a grid, and each cell has a division, which means four things have to be rendered on that cell. 3 is then 9 of course. The renderer can handle this pixel ratio, which we can set and limit.
+
+### Full screen
+
+Another housekeeping thing.
+
+## 09 - Geometries
+
+What is a geometry?
+
+- Composed of vertices.
+- These are joined to form faces
+- If we forget faces, we get "particles". More of that later.
+- A face is just a triangle between 3 vertices.
+- In each vertex, we can store more than the coordinates of it.
+
+  - UV
+  - Normal
+
+- For storing buffer geometry, we use Float32Array (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array)
+
+- One interesting performance trick: as there will be vertices in some shapes, like cubes, which share the smae coordinates, they can reuse the same vertex to form different faces, which will bring performance improvements.
